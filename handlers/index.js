@@ -50,26 +50,26 @@ exports.assert = (request, reply) => {
       if (err) {
         request.log(['err'], err)
         reply('Something failed').code(500)
+      } else {
+        // Data recived from idporten
+        const dataObj = {
+          email: profile.Email,
+          mobilePhone: profile.MobilePhone,
+          uid: profile.uid,
+          logoutUrl: `${config.route.defaultUrl}${config.route.logout}`
+        }
+
+        request.log(['debug'], dataObj)
+
+        // Save profile for logout in yar
+        profile.logoutUrl = `${config.route.defaultUrl}${config.route.logout}`
+        request.yar.set('profile', profile)
+
+        const encObj = encryptor.encrypt(dataObj)
+        const token = jwt.sign({data: encObj}, config.SAML_JWT_SECRET, config.jwtTokenOptions)
+        const redirUrl = `${config.route.loginRedir}/?jwt=${token}`
+        reply.redirect(redirUrl)
       }
-
-      // Data recived from idporten
-      const dataObj = {
-        email: profile.Email,
-        mobilePhone: profile.MobilePhone,
-        uid: profile.uid,
-        logoutUrl: `${config.route.defaultUrl}${config.route.logout}`
-      }
-
-      request.log(['debug'], dataObj)
-
-      // Save profile for logout in yar
-      profile.logoutUrl = `${config.route.defaultUrl}${config.route.logout}`
-      request.yar.set('profile', profile)
-
-      const encObj = encryptor.encrypt(dataObj)
-      const token = jwt.sign({data: encObj}, config.SAML_JWT_SECRET, config.jwtTokenOptions)
-      const redirUrl = `${config.route.loginRedir}/?jwt=${token}`
-      reply.redirect(redirUrl)
     })
   }
 }
