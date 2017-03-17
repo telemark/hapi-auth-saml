@@ -1,0 +1,10 @@
+version: "2"
+
+services:
+  idporten:
+    image: hapi-auth-saml
+    # build: .
+    container_name: idporten
+    env_file: docker.env
+    ports:
+       - 3000:3000
