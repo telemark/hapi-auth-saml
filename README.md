@@ -1,5 +1,7 @@
 # hapi-auth-saml
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/telemark/hapi-auth-saml.svg)](https://greenkeeper.io/)
+
 Work in progress
 
 ## License
