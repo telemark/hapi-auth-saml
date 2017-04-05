@@ -26,7 +26,7 @@ module.exports = [
   },
   {
     method: 'GET',
-    path: `${config.route.login}/{site?}`,
+    path: `${config.route.login}`,
     handler: handlers.login,
     config: {
       description: 'login',

@@ -30,6 +30,7 @@
     "standard": "9.0.1"
   },
   "dependencies": {
+    "axios": "0.16.0",
     "boom": "4.2.0",
     "debug": "2.2.0",
     "good": "7.1.0",

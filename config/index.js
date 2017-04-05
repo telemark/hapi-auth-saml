@@ -5,30 +5,32 @@ const fs = require('fs')
 const privateCertPath = process.env.SAML_PRIV_CERT_PATH || './cert/key.pem'
 const decryptionPvkPath = process.env.SAML_PRIV_DEC_PATH || './cert/key.pem'
 const certPath = process.env.SAML_CERT_PATH || './cert/cert.pem'
-const defaultUrl = process.env.SAML_DEFAULT_URL || 'https://yourdomain.no' // The url that id-porten redirects to
+const defaultUrl = process.env.SAML_DEFAULT_URL || 'https://yourdomain.no' // The url of SP
 
 module.exports = {
+  SESSION_STORAGE_URL: process.env.SESSION_STORAGE_URL || 'https://tmp.storage.service.t-fk.no',
   jwtTokenOptions: {
     expiresIn: '1h',
     issuer: 'https://auth.t-fk.no'
   },
   defaultUrl: defaultUrl,
-  SERVER_PORT: process.env.SERVER_PORT || 3000, // Local server port
+  SERVER_PORT: process.env.SERVER_PORT || 999, // Local server port
   SAML_YAR_SECRET: process.env.SAML_YAR_SECRET || 'Louie Louie, oh no, I got to go. Louie Louie, oh no, I got to go',
+  SAML_ENCRYPTOR_SECRET: process.env.SAML_ENCRYPTOR_SECRET || 'Louie Louie, oh no, I got to go Louie Louie, oh no, I got to go',
   SAML_JWT_SECRET: process.env.SAML_JWT_SECRET || 'Louie Louie, oh no, I got to go. Louie Louie, oh no, I got to go',
   route: {
     login: process.env.SAML_ROUTE_LOGIN || '/login', // local url path to login
-    loginResponse: process.env.SAML_ROUTE_LOGIN_RESPONSE || '/assertionconsumer', // Where idporten sends you on login
-    loginRedir: process.env.SAML_ROUTE_LOGIN_REDIR || 'https://yourapp.no', // Where to be redirected after login
+    loginResponse: process.env.SAML_ROUTE_LOGIN_RESPONSE || '/assertionconsumer', // Where IdP sends you on login
+    loginRedir: process.env.SAML_ROUTE_LOGIN_REDIR || 'https://yourapp.no', // Where to be redirected after sucessfull login
     logout: process.env.SAML_ROUTE_LOGOUT || '/logout', // local url path to logout
-    logoutResponse: process.env.SAML_ROUTE_LOGOUT_RESPONSE || '/logoutResponse', // Where idporten sends you after logout
-    logoutRedir: process.env.SAML_ROUTE_LOGOUT_REDIR || 'https://www.telemark.no' // Where to be redirected after logout
+    logoutResponse: process.env.SAML_ROUTE_LOGOUT_RESPONSE || '/logoutResponse', // Where IdP sends you after logout
+    logoutRedir: process.env.SAML_ROUTE_LOGOUT_REDIR || 'https://www.telemark.no' // Where to be redirected after sucessfull logout
   },
   passport: {
     strategy: 'saml',
-    privateCert: process.env.SAML_PRIV_CERT_FILE || fs.readFileSync(privateCertPath, 'utf-8'), // Idporten private key
-    decryptionPvk: process.env.SAML_PRIV_DEV_FILE || fs.readFileSync(decryptionPvkPath, 'utf-8'), // Idporten private decryption key (probably the same as above)
-    cert: process.env.SAML_CERT_FILE || fs.readFileSync(certPath, 'utf-8'), // Idporten certificate
+    privateCert: process.env.SAML_PRIV_CERT_FILE || fs.readFileSync(privateCertPath, 'utf-8'), // SP private key
+    decryptionPvk: process.env.SAML_PRIV_DEV_FILE || fs.readFileSync(decryptionPvkPath, 'utf-8'), // SP private decryption key (probably the same as above)
+    cert: process.env.SAML_CERT_FILE || fs.readFileSync(certPath, 'utf-8'), // IdP certificate
     protocol: process.env.SAML_PROTOCOL || 'https://',
     path: process.env.SAML_LOGIN_PATH || '/assertionconsumer',
     pathLogout: process.env.SAML_LOGOUT_PATH || '/logout',

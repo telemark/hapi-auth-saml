@@ -1,26 +1,26 @@
 'use strict'
 
 const config = require('../config')
-const jwt = require('jsonwebtoken')
-const encryptor = require('simple-encryptor')(config.SAML_JWT_SECRET)
+const saveSession = require('../lib/save-session')
+const generateJwt = require('../lib/generate-jwt')
 
-exports.front = (request, reply) => {
+module.exports.front = (request, reply) => {
   const message = {
     message: 'Hello lovely human! Look at docs at https://github.com/telemark/hapi-auth-saml'
   }
   reply(message)
 }
 
-exports.ping = (request, reply) => {
+module.exports.ping = (request, reply) => {
   const message = { ping: 'pong' }
   reply(message)
 }
 
-exports.logoutResponse = (request, reply) => {
+module.exports.logoutResponse = (request, reply) => {
   reply.redirect(config.route.logoutRedir)
 }
 
-exports.login = (request, reply) => {
+module.exports.login = (request, reply) => {
   const saml = request.server.plugins['hapi-passport-saml'].instance
 
   saml.getAuthorizeUrl({
@@ -37,44 +37,43 @@ exports.login = (request, reply) => {
   })
 }
 
-exports.assert = (request, reply) => {
+module.exports.assert = (request, reply) => {
   const saml = request.server.plugins['hapi-passport-saml'].instance
 
   if (request.payload.SAMLRequest) {
     // Implement your SAMLRequest handling here
+    request.log(['err'], 'SAMLRequest failed')
     reply('Something failed').code(500)
   }
   if (request.payload.SAMLResponse) {
     // Handles SP use cases, e.g. IdP is external and SP is Hapi
-    saml.validatePostResponse(request.payload, (err, profile) => {
+    saml.validatePostResponse(request.payload, async (err, profile) => {
       if (err) {
         request.log(['err'], err)
         reply('Something failed').code(500)
       } else {
-        // Data recived from idporten
-        const dataObj = {
-          email: profile.Email,
-          mobilePhone: profile.MobilePhone,
-          uid: profile.uid,
-          logoutUrl: `${config.route.defaultUrl}${config.route.logout}`
-        }
+        // Data recived from IdP
 
-        request.log(['debug'], dataObj)
+        request.log(['debug'], profile)
+
+        // Save session to temp storage
+        const session = await saveSession(profile)
+
+        // Generates and encrypts jwt with data from IdP
+        const jwt = generateJwt(Object.assign({sessionKey: session}, profile))
 
         // Save profile for logout in yar
-        profile.logoutUrl = `${config.route.defaultUrl}${config.route.logout}`
         request.yar.set('profile', profile)
 
-        const encObj = encryptor.encrypt(dataObj)
-        const token = jwt.sign({data: encObj}, config.SAML_JWT_SECRET, config.jwtTokenOptions)
-        const redirUrl = `${config.route.loginRedir}/?jwt=${token}`
+        // Redirects to application with encrypted jwt
+        const redirUrl = `${config.route.loginRedir}/?jwt=${jwt}`
         reply.redirect(redirUrl)
       }
     })
   }
 }
 
-exports.logout = (request, reply) => {
+module.exports.logout = (request, reply) => {
   const saml = request.server.plugins['hapi-passport-saml'].instance
   request.user = request.yar.get('profile')
 

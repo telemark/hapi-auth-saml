@@ -35,7 +35,7 @@ const goodOptions = {
 const yarOptions = {
   storeBlank: false,
   cookieOptions: {
-    password: config.YAR_SECRET,
+    password: config.SAML_YAR_SECRET,
     isSecure: process.env.NODE_ENV !== 'development',
     isSameSite: 'Lax'
   }
