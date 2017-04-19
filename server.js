@@ -4,6 +4,7 @@ const Hapi = require('hapi')
 const config = require('./config')
 const routes = require('./routes')
 const plugins = require('./plugins')
+const logger = require('./lib/logger')
 
 // Create a server with a host and port
 const server = new Hapi.Server()
@@ -26,13 +27,13 @@ server.route(routes)
 // Start the server
 module.exports.start = () => {
   server.start(() => {
-    server.log(`Server running at: ${server.info.uri}`)
+    logger('info', `Server running at: ${server.info.uri}`)
   })
 }
 
 // Stop the server
 module.exports.stop = () => {
   server.stop(() => {
-    console.log('Server stopped')
+    logger('info', 'Server stopped')
   })
 }
