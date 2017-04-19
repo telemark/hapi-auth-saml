@@ -3,93 +3,101 @@
 const config = require('../config')
 const saveSession = require('../lib/save-session')
 const generateJwt = require('../lib/generate-jwt')
+const logger = require('../lib/logger')
 
-module.exports.front = (request, reply) => {
+exports.front = (request, reply) => {
   const message = {
     message: 'Hello lovely human! Look at docs at https://github.com/telemark/hapi-auth-saml'
   }
   reply(message)
 }
 
-module.exports.ping = (request, reply) => {
+exports.ping = (request, reply) => {
   const message = { ping: 'pong' }
+  logger('info', 'ping')
   reply(message)
 }
 
-module.exports.logoutResponse = (request, reply) => {
+exports.logoutResponse = (request, reply) => {
   reply.redirect(config.route.logoutRedir)
 }
 
-module.exports.login = (request, reply) => {
+exports.login = (request, reply) => {
   const saml = request.server.plugins['hapi-passport-saml'].instance
-
-  saml.getAuthorizeUrl({
-    headers: request.headers,
-    body: request.payload,
-    query: request.query
-  }, (err, loginUrl) => {
-    if (err) {
-      request.log(['err'], err)
-      reply('Something failed').code(500)
-    } else {
-      reply.redirect(loginUrl)
-    }
-  })
+  if (!request.query.origin) {
+    logger('info', 'No origin param set')
+    reply('No origin param set').code(500)
+  } else {
+    request.yar.set('origin', request.query.origin)
+    logger('info', `Set origin to ${request.query.origin} in yar ${request.yar.id}`)
+    saml.getAuthorizeUrl({
+      headers: request.headers,
+      body: request.payload,
+      query: request.query
+    }, (err, loginUrl) => {
+      if (err) {
+        logger('error', err)
+        reply('Something failed').code(500)
+      } else {
+        logger('info', `Redirecting to ${loginUrl}`)
+        reply.redirect(loginUrl)
+      }
+    })
+  }
 }
 
-module.exports.assert = (request, reply) => {
+exports.assert = (request, reply) => {
   const saml = request.server.plugins['hapi-passport-saml'].instance
 
   if (request.payload.SAMLRequest) {
     // Implement your SAMLRequest handling here
-    request.log(['err'], 'SAMLRequest failed')
-    reply('Something failed').code(500)
+    logger('error', request.payload.SAMLRequest)
+    reply('Something failed in SAMLRequest').code(500)
   }
   if (request.payload.SAMLResponse) {
     // Handles SP use cases, e.g. IdP is external and SP is Hapi
+    console.log(request.payload)
     saml.validatePostResponse(request.payload, async (err, profile) => {
       if (err) {
-        request.log(['err'], err)
-        reply('Something failed').code(500)
+        logger('error', err)
+        reply('Something failed in validating response from IdP').code(500)
       } else {
         // Data recived from IdP
+        logger('info', profile)
 
-        request.log(['debug'], profile)
-
-        // Save session to temp storage
         const session = await saveSession(profile)
-
-        // Generates and encrypts jwt with data from IdP
         const jwt = generateJwt(Object.assign({sessionKey: session}, profile))
 
         // Save profile for logout in yar
+        const origin = request.yar.get('origin')
+        logger('info', `Get origin ${origin} from ${request.yar.id}`)
         request.yar.set('profile', profile)
-
-        // Redirects to application with encrypted jwt
-        const redirUrl = `${config.route.loginRedir}/?jwt=${jwt}`
+        const redirUrl = `${origin}/?jwt=${jwt}`
+        logger('info', `Redirecting to ${redirUrl}`)
         reply.redirect(redirUrl)
       }
     })
   }
 }
 
-module.exports.logout = (request, reply) => {
+exports.logout = (request, reply) => {
   const saml = request.server.plugins['hapi-passport-saml'].instance
   request.user = request.yar.get('profile')
 
   // if no yar session exist, its not possible to log out the user
   if (!request.user) {
-    request.log(['debug'], 'User not logged in trying to log out')
+    logger('info', 'User not logged in trying to log out')
     reply('Not logged in').code(500)
   } else {
     saml.getLogoutUrl(request, (err, url) => {
       if (err) {
-        request.log(['err'], err)
-        reply('Something failed').code(500)
+        logger('error', err)
+        reply('Something failed at logging out').code(500)
       } else {
-        request.log(['debug'], 'User logged out')
+        logger('info', 'User logged out')
         request.yar.clear('profile')
         request.yar.reset()
+        logger('info', `Redirecting to ${url}`)
         reply.redirect(url)
       }
     })

@@ -18,10 +18,12 @@ module.exports = {
   SAML_YAR_SECRET: process.env.SAML_YAR_SECRET || 'Louie Louie, oh no, I got to go. Louie Louie, oh no, I got to go',
   SAML_ENCRYPTOR_SECRET: process.env.SAML_ENCRYPTOR_SECRET || 'Louie Louie, oh no, I got to go Louie Louie, oh no, I got to go',
   SAML_JWT_SECRET: process.env.SAML_JWT_SECRET || 'Louie Louie, oh no, I got to go. Louie Louie, oh no, I got to go',
+  PAPERTRAIL_HOSTNAME: process.env.PAPERTRAIL_HOSTNAME || 'hapi-auth-saml',
+  PAPERTRAIL_HOST: process.env.PAPERTRAIL_HOST || 'logs.papertrailapp.com',
+  PAPERTRAIL_PORT: process.env.PAPERTRAIL_PORT || 12345,
   route: {
     login: process.env.SAML_ROUTE_LOGIN || '/login', // local url path to login
     loginResponse: process.env.SAML_ROUTE_LOGIN_RESPONSE || '/assertionconsumer', // Where IdP sends you on login
-    loginRedir: process.env.SAML_ROUTE_LOGIN_REDIR || 'https://yourapp.no', // Where to be redirected after sucessfull login
     logout: process.env.SAML_ROUTE_LOGOUT || '/logout', // local url path to logout
     logoutResponse: process.env.SAML_ROUTE_LOGOUT_RESPONSE || '/logoutResponse', // Where IdP sends you after logout
     logoutRedir: process.env.SAML_ROUTE_LOGOUT_REDIR || 'https://www.telemark.no' // Where to be redirected after sucessfull logout
