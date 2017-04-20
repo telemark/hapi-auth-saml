@@ -72,7 +72,7 @@ exports.assert = (request, reply) => {
         const origin = request.yar.get('origin')
         logger('info', `Get origin ${origin} from ${request.yar.id}`)
         request.yar.set('profile', profile)
-        const redirUrl = `${origin}/?jwt=${jwt}`
+        const redirUrl = `${origin}?jwt=${jwt}`
         logger('info', `Redirecting to ${redirUrl}`)
         reply.redirect(redirUrl)
       }
