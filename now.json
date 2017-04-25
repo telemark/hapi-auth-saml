@@ -13,7 +13,9 @@
     "SAML_LOGOUT_URL": "@saml_logout_url",
     "SAML_PRIV_CERT_FILE": "@saml-priv-cert-file",
     "SAML_PRIV_DEV_FILE": "@saml-priv-dev-file",
+    "SAML_CERT_FILE": "@saml-cert-file",
     "SAML_LOGOUT_URL": "@saml-logout-url",
+    "SAML_ENTRY_POINT": "@saml-entry-point",
     "SAML_ISSUER": "@saml-issuer"
   }
 }
