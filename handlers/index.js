@@ -56,7 +56,6 @@ exports.assert = (request, reply) => {
   }
   if (request.payload.SAMLResponse) {
     // Handles SP use cases, e.g. IdP is external and SP is Hapi
-    console.log(request.payload)
     saml.validatePostResponse(request.payload, async (err, profile) => {
       if (err) {
         logger('error', err)
