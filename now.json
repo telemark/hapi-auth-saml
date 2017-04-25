@@ -10,7 +10,7 @@
     "SAML_YAR_SECRET": "@saml-yar-secret",
     "SAML_ENCRYPTOR_SECRET": "@saml-encryptor-secret",
     "SAML_JWT_SECRET": "@saml-jwt-secret",
-    "SAML_LOGOUT_URL": "@saml_logout_url",
+    "SAML_LOGOUT_URL": "@saml-logout-url",
     "SAML_PRIV_CERT_FILE": "@saml-priv-cert-file",
     "SAML_PRIV_DEV_FILE": "@saml-priv-dev-file",
     "SAML_CERT_FILE": "@saml-cert-file",
