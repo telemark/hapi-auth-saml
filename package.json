@@ -1,6 +1,6 @@
 {
   "name": "hapi-auth-saml",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Hapi auth strategy aims to work easily with saml (idporten and feide)",
   "author": "Jonas Enge <jonas.enge@gmail.com> (http://github.com/maccyber)",
   "license": "MIT",
