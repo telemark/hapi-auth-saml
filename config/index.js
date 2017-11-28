@@ -23,7 +23,7 @@ module.exports = {
   PAPERTRAIL_PORT: process.env.PAPERTRAIL_PORT || 12345,
   route: {
     login: process.env.SAML_ROUTE_LOGIN || '/login', // local url path to login
-    loginResponse: process.env.SAML_ROUTE_LOGIN_RESPONSE || '/assertionconsumer', // Where IdP sends you on login
+    loginResponse: process.env.SAML_ROUTE_LOGIN_RESPONSE || '/loginResponse', // Where IdP sends you on login
     logout: process.env.SAML_ROUTE_LOGOUT || '/logout', // local url path to logout
     logoutResponse: process.env.SAML_ROUTE_LOGOUT_RESPONSE || '/logoutResponse', // Where IdP sends you after logout
     logoutRedir: process.env.SAML_ROUTE_LOGOUT_REDIR || 'https://www.telemark.no' // Where to be redirected after sucessfull logout
