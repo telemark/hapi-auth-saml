@@ -39,6 +39,6 @@
     "simple-encryptor": "1.1.0",
     "winston": "2.3.1",
     "winston-papertrail": "1.0.4",
-    "yar": "8.1.2"
+    "yar": "9.0.1"
   }
 }
