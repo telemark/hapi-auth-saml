@@ -25,7 +25,7 @@
   "devDependencies": {
     "ava": "0.25.0",
     "coveralls": "3.0.1",
-    "nsp": "2.6.3",
+    "nsp": "2.8.1",
     "nyc": "10.1.2",
     "standard": "9.0.1"
   },
