@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "axios": "0.18.0",
-    "boom": "4.2.0",
+    "boom": "7.2.0",
     "debug": "2.2.0",
     "hapi": "16.6.3",
     "hapi-passport-saml": "0.1.1",
