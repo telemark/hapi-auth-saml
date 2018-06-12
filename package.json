@@ -34,7 +34,7 @@
     "boom": "4.3.1",
     "debug": "2.2.0",
     "hapi": "16.6.3",
-    "hapi-passport-saml": "0.1.1",
+    "hapi-passport-saml": "0.3.0",
     "jsonwebtoken": "8.3.0",
     "simple-encryptor": "1.1.0",
     "winston": "2.4.2",
