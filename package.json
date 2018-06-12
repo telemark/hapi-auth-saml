@@ -37,7 +37,7 @@
     "hapi-passport-saml": "0.1.1",
     "jsonwebtoken": "8.3.0",
     "simple-encryptor": "1.1.0",
-    "winston": "2.4.2",
+    "winston": "2.4.3",
     "winston-papertrail": "1.0.5",
     "yar": "8.1.2"
   }
