@@ -5,7 +5,7 @@
 ###########################################################
 
 # Setting the base to nodejs 7
-FROM node:7.7.3-alpine
+FROM node:6.14.3-alpine
 
 # Maintainer
 MAINTAINER Jonas Enge
