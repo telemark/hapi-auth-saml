@@ -1,14 +1,4 @@
-###########################################################
-#
-# Dockerfile for idporten
-#
-###########################################################
-
-# Setting the base to nodejs 7
-FROM node:7.10.1-alpine
-
-# Maintainer
-MAINTAINER Jonas Enge
+FROM node:10.15.0-alpine
 
 #### Begin setup ####
 
