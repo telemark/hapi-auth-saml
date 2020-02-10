@@ -9,7 +9,7 @@ const yarOptions = {
   cookieOptions: {
     password: config.SAML_YAR_SECRET,
     isSecure: process.env.NODE_ENV !== 'development',
-    isSameSite: false
+    isSameSite: 'Lax'
   }
 }
 
