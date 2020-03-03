@@ -1,22 +1,12 @@
-FROM node:10.19.0-alpine
+FROM node:13.8
+WORKDIR /usr/src
+COPY package.json package-lock.json /usr/src/
+RUN npm i --production
+COPY . .
 
-#### Begin setup ####
-
-# Installs git
-RUN apk add --update --no-cache git
-
-# Bundle app source
-COPY . /src
-
-# Change working directory
-WORKDIR "/src"
-
-# Install dependencies
-RUN npm install --production
-
-# Expose 3000
+FROM node:13.8-slim
+WORKDIR /usr/src
+COPY --from=0 /usr/src .
+COPY . .
 EXPOSE 3000
-
-# Startup
-ENTRYPOINT npm start
-
+CMD ["npm", "start"]
