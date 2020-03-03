@@ -1,6 +1,6 @@
 FROM node:13.8
 WORKDIR /usr/src
-COPY package.json package-lock.json /usr/src/
+COPY package.json /usr/src/
 RUN npm i --production
 COPY . .
 
