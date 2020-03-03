@@ -1,7 +1,7 @@
 {
   "name": "hapi-auth-saml",
   "aliases": [
-    "saml-login.no"
+    "feide.service.t-fk.no"
   ],
   "type": "npm",
   "env": {
