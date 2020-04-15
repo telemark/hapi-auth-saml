@@ -1,4 +1,5 @@
 'use strict'
+require('dotenv').config()
 
 const fs = require('fs')
 
@@ -14,7 +15,7 @@ module.exports = {
     issuer: 'https://auth.t-fk.no'
   },
   defaultUrl: defaultUrl,
-  SERVER_PORT: process.env.SERVER_PORT || 999, // Local server port
+  SERVER_PORT: process.env.SERVER_PORT || 3000, // Local server port
   SAML_YAR_SECRET: process.env.SAML_YAR_SECRET || 'Louie Louie, oh no, I got to go. Louie Louie, oh no, I got to go',
   SAML_ENCRYPTOR_SECRET: process.env.SAML_ENCRYPTOR_SECRET || 'Louie Louie, oh no, I got to go Louie Louie, oh no, I got to go',
   SAML_JWT_SECRET: process.env.SAML_JWT_SECRET || 'Louie Louie, oh no, I got to go. Louie Louie, oh no, I got to go',
@@ -42,5 +43,6 @@ module.exports = {
     entryPoint: process.env.SAML_ENTRY_POINT || 'https://idporten.difi.no/opensso/SSORedirect/metaAlias/norge.no/idp3', // Metadata XML: location from SingleSignOnService-tag (http-redirect)
     issuer: process.env.SAML_ISSUER || 'entityId', // Metadata XML: entityID from EntityDescriptor-tag
     identifierFormat: process.env.SAML_IDENT_FORMAT || 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient' // Metadata XML: Data inside NameIDFormat
-  }
+  },
+  SAME_SITE: process.env.SAME_SITE || 'Lax'
 }

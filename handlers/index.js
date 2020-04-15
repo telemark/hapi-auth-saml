@@ -49,6 +49,11 @@ exports.login = (request, reply) => {
 exports.assert = (request, reply) => {
   const saml = request.server.plugins['hapi-passport-saml'].instance
 
+  logger('info', ['assert', 'cookie', request.cookie])
+  logger('info', ['assert', 'yar-origin', request.yar.get('origin')])
+
+  console.log(request)
+
   if (request.payload.SAMLRequest) {
     // Implement your SAMLRequest handling here
     logger('error', request.payload.SAMLRequest)
@@ -63,6 +68,7 @@ exports.assert = (request, reply) => {
       } else {
         // Data recived from IdP
         logger('info', profile)
+        logger('info', ['assert', 'yar-origin', request.yar.get('origin')])
 
         const session = await saveSession(profile)
         const jwt = generateJwt(Object.assign({sessionKey: session}, profile))
