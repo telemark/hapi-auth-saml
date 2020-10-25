@@ -29,7 +29,7 @@
     "standard": "12.0.1"
   },
   "dependencies": {
-    "axios": "0.18.1",
+    "axios": "0.21.0",
     "boom": "4.2.0",
     "debug": "2.6.9",
     "hapi": "16.1.1",
